@@ -1,13 +1,13 @@
 #include <cassert>
 
 #include <map>
-#include <vector>
 #include <unordered_set>
+#include <vector>
 
-#include <actor-zeta/core.hpp>
+#include <actor-zeta.hpp>
 
-using actor_zeta::basic_async_actor ;
 using actor_zeta::abstract_executor;
+using actor_zeta::basic_async_actor;
 using actor_zeta::context;
 using actor_zeta::supervisor;
 
@@ -17,23 +17,23 @@ using actor_zeta::message;
 
 class dummy_executor final : public abstract_executor {
 public:
-    dummy_executor():abstract_executor(1,10000){}
+    dummy_executor()
+        : abstract_executor(1, 10000) {}
 
-    void execute(actor_zeta::executable *ptr) override {
+    void execute(actor_zeta::executable* ptr) override {
         ptr->run(nullptr, max_throughput());
     }
-    void start() override{}
-    void stop() override{}
+    void start() override {}
+    void stop() override {}
 };
 
 class supervisor_lite final : public supervisor {
 public:
-    explicit supervisor_lite(dummy_executor *ptr)
-            : supervisor("network")
-            , e_(ptr)
-            , cursor(0)
-            , system_{"sync_contacts", "add_link", "remove_link"}
-    {
+    explicit supervisor_lite(dummy_executor* ptr)
+        : supervisor("network")
+        , e_(ptr)
+        , cursor(0)
+        , system_{"sync_contacts", "add_link", "remove_link"} {
     }
 
     ~supervisor_lite() override = default;
@@ -46,7 +46,7 @@ public:
         e_->start();
     }
 
-    auto executor() noexcept -> actor_zeta::abstract_executor & final { return *e_; }
+    auto executor() noexcept -> actor_zeta::abstract_executor& final { return *e_; }
 
     auto join(actor_zeta::actor t) -> actor_zeta::actor_address final {
         auto tmp = std::move(t);
@@ -55,7 +55,7 @@ public:
         return address;
     }
 
-    auto enqueue(message msg, actor_zeta::execution_device *) -> void final {
+    auto enqueue(message msg, actor_zeta::execution_device*) -> void final {
         auto msg_ = std::move(msg);
         auto it = system_.find(msg_.command());
         if (it != system_.end()) {
@@ -81,7 +81,7 @@ private:
         }
     }
 
-    abstract_executor *e_;
+    abstract_executor* e_;
     std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
     std::unordered_set<actor_zeta::detail::string_view> system_;
@@ -89,22 +89,20 @@ private:
 
 class storage_t final : public basic_async_actor {
 public:
-    explicit storage_t(supervisor_lite&ref) : basic_async_actor(ref, "storage") {
+    explicit storage_t(supervisor_lite& ref)
+        : basic_async_actor(ref, "storage") {
         add_handler(
-                "update",
-                [](context & /*ctx*/) -> void {}
-        );
+            "update",
+            [](context& /*ctx*/) -> void {});
 
         add_handler(
-                "find",
-                [](context & /*ctx*/) -> void {}
-        );
+            "find",
+            [](context& /*ctx*/) -> void {});
 
         add_handler(
 
-                "remove",
-                [](context & /*ctx*/) -> void {}
-        );
+            "remove",
+            [](context& /*ctx*/) -> void {});
     }
 
     ~storage_t() override = default;
@@ -114,28 +112,28 @@ class network_t final : public basic_async_actor {
 public:
     ~network_t() override = default;
 
-    explicit network_t(supervisor_lite &ref) : basic_async_actor(ref, "network") {}
+    explicit network_t(supervisor_lite& ref)
+        : basic_async_actor(ref, "network") {}
 };
 
 int main() {
-
     std::unique_ptr<supervisor_lite> supervisor(new supervisor_lite(new dummy_executor));
 
     auto storage = join<storage_t>(*supervisor);
 
     auto network = join<network_t>(*supervisor);
 
-    actor_zeta::link(storage,network);
+    actor_zeta::link(storage, network);
 
     std::unique_ptr<supervisor_lite> supervisor1(new supervisor_lite(new dummy_executor));
 
-    actor_zeta::link(*supervisor,*supervisor1);
+    actor_zeta::link(*supervisor, *supervisor1);
 
     auto storage1 = join<storage_t>(*supervisor1);
 
     auto network1 = join<network_t>(*supervisor1);
 
-    actor_zeta::link(storage1,network1);
+    actor_zeta::link(storage1, network1);
 
     return 0;
 }

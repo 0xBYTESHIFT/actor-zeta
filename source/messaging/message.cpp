@@ -5,8 +5,8 @@
 
 namespace actor_zeta { namespace base {
 
-    auto message::command() const noexcept -> detail::string_view {
-        return detail::string_view(command_.data(), command_.size());
+    auto message::command() const noexcept -> std::string_view {
+        return std::string_view(command_.data(), command_.size());
     }
 
     auto message::clone() const -> message* {
@@ -22,7 +22,7 @@ namespace actor_zeta { namespace base {
         , command_(std::move(name))
         , body_() {}
 
-    message::message(base::actor_address sender, std::string name, detail::any body)
+    message::message(base::actor_address sender, std::string name, std::any body)
         : sender_(std::move(sender))
         , command_(std::move(name))
         , body_(std::move(body)) {}
@@ -46,7 +46,7 @@ namespace actor_zeta { namespace base {
         return false;
     }
 
-    auto message::body() -> detail::any& {
+    auto message::body() -> std::any& {
         assert(body_.has_value());
         return body_;
     }

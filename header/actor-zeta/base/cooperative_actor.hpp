@@ -1,6 +1,7 @@
 #pragma once
 
 #include <actor-zeta/base/abstract_actor.hpp>
+#include <actor-zeta/base/message.hpp>
 #include <actor-zeta/detail/single_reader_queue.hpp>
 #include <actor-zeta/executor/executable.hpp>
 #include <actor-zeta/forwards.hpp>
@@ -27,7 +28,7 @@ namespace actor_zeta { namespace base {
         void intrusive_ptr_release_impl() override;
 
     protected:
-        cooperative_actor(supervisor_t*, detail::string_view);
+        cooperative_actor(supervisor_t*, std::string_view);
 
         void enqueue_base(message_ptr, executor::execution_device*) final;
 

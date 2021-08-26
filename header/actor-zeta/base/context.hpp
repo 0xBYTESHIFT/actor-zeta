@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <string_view>
 
 namespace actor_zeta { namespace base {
 
@@ -12,7 +12,7 @@ namespace actor_zeta { namespace base {
     struct context {
         virtual ~context() = default;
 
-        virtual auto addresses(detail::string_view) -> actor_address& = 0;
+        virtual auto addresses(std::string_view) -> actor_address& = 0;
 
         virtual auto self() -> actor_address = 0;
 

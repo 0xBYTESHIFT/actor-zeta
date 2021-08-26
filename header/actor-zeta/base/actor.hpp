@@ -27,19 +27,19 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = std::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
         actor(intrusive_ptr<T> ptr)
             : ptr_(std::move(ptr)) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = std::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
         actor(T* ptr)
             : ptr_(ptr) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = std::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
         actor& operator=(intrusive_ptr<T> ptr) {
             actor tmp{std::move(ptr)};
             swap(tmp);
@@ -48,7 +48,7 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
+            class = std::enable_if_t<std::is_base_of<abstract_actor, T>::value>>
         actor& operator=(T* ptr) {
             actor tmp{ptr};
             swap(tmp);
@@ -67,7 +67,7 @@ namespace actor_zeta { namespace base {
             return static_cast<bool>(ptr_);
         }
 
-        auto type() const -> detail::string_view;
+        auto type() const -> std::string_view;
 
         inline bool operator!() const noexcept {
             return !ptr_;

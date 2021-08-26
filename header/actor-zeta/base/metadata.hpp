@@ -1,6 +1,6 @@
 #pragma once
 
-#include <actor-zeta/detail/string_view.hpp>
+#include <string_view>
 
 namespace actor_zeta {
 
@@ -15,7 +15,7 @@ namespace actor_zeta {
     struct metadata final {
         actor_id id_;
         sub_type_t sub_type_;
-        detail::string_view type_;
+        std::string_view type_;
     };
 
 } // namespace actor_zeta

@@ -90,13 +90,10 @@ set(HEADER_FILES
         header/actor-zeta/base/supervisor.hpp
 
         header/actor-zeta/detail/pmr/memory_resource.hpp
-        header/actor-zeta/detail/any.hpp
         header/actor-zeta/detail/callable_trait.hpp
         header/actor-zeta/detail/intrusive_ptr.hpp
         header/actor-zeta/detail/ref_counted.hpp
-        header/actor-zeta/detail/string_view.hpp
         header/actor-zeta/detail/type_list.hpp
-        header/actor-zeta/detail/type_traits.hpp
 
         header/actor-zeta/executor/policy/profiled.hpp
         header/actor-zeta/executor/policy/unprofiled.hpp
@@ -124,7 +121,6 @@ set(SOURCE_FILES
         source/actor/communication_module.cpp
 
         source/detail/pmr/memory_resource.cpp
-        source/detail/string_view.cpp
         source/detail/ref_counted.cpp
 
         source/executor/abstract_executor.cpp

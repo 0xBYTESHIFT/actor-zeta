@@ -1,18 +1,17 @@
 #pragma once
 
-// clang-format off
+#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/handler.hpp>
-#include <actor-zeta/base/actor_address.hpp>
 #include <actor-zeta/base/message.hpp>
-#include <actor-zeta/base/basic_actor.hpp>
 #include <actor-zeta/base/supervisor.hpp>
-#include <actor-zeta/impl/handler.ipp>
-// clang-format on
-#include <actor-zeta/detail/any.hpp>
 #include <actor-zeta/executor/abstract_executor.hpp>
 #include <actor-zeta/executor/executor.hpp>
 #include <actor-zeta/executor/policy/work_sharing.hpp>
+#include <actor-zeta/impl/handler.ipp>
+
+#include <any>
 
 namespace actor_zeta {
 
@@ -39,12 +38,14 @@ namespace actor_zeta {
 
     template<class T, typename Arg>
     auto make_message(actor_address sender_, T name, Arg&& arg) -> message_ptr {
-        return message_ptr(new base::message(std::move(sender_), std::forward<T>(name), std::move(detail::any(std::forward<type_traits::decay_t<Arg>>(arg)))));
+        auto any = std::any(std::forward<std::decay_t<Arg>>(arg));
+        return message_ptr(new base::message(std::move(sender_), std::forward<T>(name), std::move(any)));
     }
 
     template<class T, typename... Args>
     auto make_message(actor_address sender_, T name, Args&&... args) -> message_ptr {
-        return message_ptr(new base::message(sender_, std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...}))));
+        auto any = std::any(std::tuple<std::decay_t<Args>...>{std::forward<Args>(args)...});
+        return message_ptr(new base::message(sender_, std::forward<T>(name), std::move(any)));
     }
 
     template<

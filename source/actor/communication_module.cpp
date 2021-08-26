@@ -11,25 +11,25 @@
 
 namespace actor_zeta { namespace base {
 
-    inline void error_sync_contacts(detail::string_view __error__) {
+    inline void error_sync_contacts(std::string_view __error__) {
         std::cerr << "WARNING" << std::endl;
         std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
         std::cerr << "WARNING" << std::endl;
     }
 
-    inline void error_duplicate_handler(detail::string_view _error_) {
+    inline void error_duplicate_handler(std::string_view _error_) {
         std::cerr << "Duplicate" << std::endl;
         std::cerr << "Handler: " << _error_ << std::endl;
         std::cerr << "Duplicate" << std::endl;
     }
 
-    inline void error_add_handler(detail::string_view _error_) {
+    inline void error_add_handler(std::string_view _error_) {
         std::cerr << "error add handler" << std::endl;
         std::cerr << "Handler: " << _error_ << std::endl;
         std::cerr << "error add handler" << std::endl;
     }
 
-    inline void error_skip(detail::string_view __error__) {
+    inline void error_skip(std::string_view __error__) {
         std::cerr << "WARNING" << std::endl;
         std::cerr << "Skip : " << __error__ << std::endl;
         std::cerr << "WARNING" << std::endl;
@@ -44,7 +44,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    bool communication_module::on(detail::string_view name, handler* aa) {
+    bool communication_module::on(std::string_view name, handler* aa) {
         auto it = handlers_.find(name);
         bool status = false;
         if (it == handlers_.end()) {
@@ -79,7 +79,7 @@ namespace actor_zeta { namespace base {
             std::cerr << i.first << std::endl;
     }
 
-    auto communication_module::addresses(detail::string_view name) -> actor_address& {
+    auto communication_module::addresses(std::string_view name) -> actor_address& {
         return contacts_->at(name);
     }
 
@@ -91,14 +91,14 @@ namespace actor_zeta { namespace base {
         return type_.sub_type_;
     }
 
-    auto communication_module::type() const -> detail::string_view {
+    auto communication_module::type() const -> std::string_view {
         return type_.type_;
     }
 
     communication_module::~communication_module() {}
 
-    communication_module::communication_module(detail::string_view name, sub_type_t type)
-        : contacts_(new std::unordered_map<detail::string_view, actor_address>)
+    communication_module::communication_module(std::string_view name, sub_type_t type)
+        : contacts_(new std::unordered_map<std::string_view, actor_address>)
         , type_{0, type, name} {
         initialize();
     }

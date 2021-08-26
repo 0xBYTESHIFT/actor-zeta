@@ -18,7 +18,7 @@ namespace actor_zeta { namespace base {
         : public ref_counted
         , public context {
     public:
-        using key_type = detail::string_view;
+        using key_type = std::string_view;
         using storage = std::unordered_map<key_type, std::unique_ptr<handler>>;
 
         communication_module() = delete;
@@ -33,7 +33,7 @@ namespace actor_zeta { namespace base {
 
         auto sub_type() const -> sub_type_t;
 
-        auto type() const -> detail::string_view;
+        auto type() const -> std::string_view;
 
         auto message_types() const -> std::set<std::string>;
 
@@ -44,27 +44,27 @@ namespace actor_zeta { namespace base {
         auto broadcast(message_ptr) -> bool;
 
     protected:
-        communication_module(detail::string_view, sub_type_t);
+        communication_module(std::string_view, sub_type_t);
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        auto addresses(detail::string_view) -> actor_address& override;
+        auto addresses(std::string_view) -> actor_address& override;
 
         auto self() -> actor_address override;
 
         template<class F>
-        auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
+        auto add_handler(std::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
             on(name, make_handler(std::forward<F>(f)));
         }
 
         template<typename F>
-        auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
+        auto add_handler(std::string_view name, F&& f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
             on(name, make_handler(std::forward<F>(f), static_cast<typename type_traits::get_callable_trait_t<F>::class_type*>(this)));
         }
 
         void execute(context&);
 
-        bool on(detail::string_view, handler*);
+        bool on(std::string_view, handler*);
 
         /**
            * debug method
@@ -78,7 +78,7 @@ namespace actor_zeta { namespace base {
 
         void initialize();
 
-        std::unique_ptr<std::unordered_map<detail::string_view, actor_address>> contacts_;
+        std::unique_ptr<std::unordered_map<std::string_view, actor_address>> contacts_;
         storage handlers_;
         metadata type_;
     };
