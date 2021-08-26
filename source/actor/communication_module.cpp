@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_t.hpp>
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/message.hpp>
@@ -86,7 +86,7 @@ namespace actor_zeta { namespace base {
         return std::make_pair(list.cbegin(), list.cend());
     }
 
-    auto communication_module::self() const -> actor_address {
+    auto communication_module::self() const -> address_t {
         return address();
     }
 
@@ -105,8 +105,8 @@ namespace actor_zeta { namespace base {
         initialize();
     }
 
-    actor_address communication_module::address() const noexcept {
-        return actor_address{const_cast<communication_module*>(this)};
+    address_t communication_module::address() const noexcept {
+        return address_t{const_cast<communication_module*>(this)};
     }
 
     void communication_module::initialize() {
@@ -119,7 +119,7 @@ namespace actor_zeta { namespace base {
             &communication_module::remove_link);
     }
 
-    void communication_module::add_link(actor_address address) {
+    void communication_module::add_link(address_t address) {
         if (address) {
             auto name = address->type();
             contacts_[name].emplace_back(std::move(address));
@@ -129,7 +129,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    void communication_module::remove_link(const actor_address& address) {
+    void communication_module::remove_link(const address_t& address) {
         auto it = contacts_.find(address->type());
         if (it != contacts_.end()) {
             contacts_.erase(it);

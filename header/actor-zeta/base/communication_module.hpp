@@ -19,7 +19,7 @@ namespace actor_zeta { namespace base {
     public:
         using key_type = std::string;
         using storage = std::unordered_map<key_type, std::unique_ptr<handler>>;
-        using storage_contact_t = std::list<actor_address>;
+        using storage_contact_t = std::list<address_t>;
         using contacts_t = std::unordered_map<key_type, storage_contact_t>;
         using contacts_iterator_t = storage_contact_t::iterator;
         using range_t = std::pair<contacts_iterator_t, contacts_iterator_t>;
@@ -33,7 +33,7 @@ namespace actor_zeta { namespace base {
 
         ~communication_module() override;
 
-        auto address() const noexcept -> actor_address;
+        auto address() const noexcept -> address_t;
 
         auto sub_type() const -> sub_type_t;
 
@@ -56,7 +56,7 @@ namespace actor_zeta { namespace base {
 
         auto addresses(const std::string&) -> address_range_t;
 
-        auto self() const -> actor_address;
+        auto self() const -> address_t;
 
         template<class F>
         auto add_handler(const std::string& name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
@@ -78,9 +78,9 @@ namespace actor_zeta { namespace base {
         auto all_view_address() const -> void;
 
     private:
-        void add_link(actor_address);
+        void add_link(address_t);
 
-        void remove_link(const actor_address&);
+        void remove_link(const address_t&);
 
         void initialize();
 

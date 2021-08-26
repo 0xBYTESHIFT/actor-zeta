@@ -31,9 +31,9 @@ namespace actor_zeta { namespace base {
 
         ~message() = default;
 
-        message(base::actor_address /*sender*/, std::string /*name*/);
+        message(base::address_t /*sender*/, std::string /*name*/);
 
-        message(base::actor_address /*sender*/, std::string /*name*/, std::any /*body*/);
+        message(base::address_t /*sender*/, std::string /*name*/, std::any /*body*/);
 
         message* next;
 
@@ -41,7 +41,7 @@ namespace actor_zeta { namespace base {
 
         auto command() const noexcept -> const std::string&;
 
-        auto sender() const -> base::actor_address;
+        auto sender() const -> base::address_t;
 
         template<typename T>
         auto body() const -> const T& {
@@ -66,7 +66,7 @@ namespace actor_zeta { namespace base {
         bool is_high_priority() const;
 
     private:
-        base::actor_address sender_;
+        base::address_t sender_;
 
         std::string command_;
 

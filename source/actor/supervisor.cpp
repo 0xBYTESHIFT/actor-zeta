@@ -1,4 +1,4 @@
-#include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/address_t.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
 

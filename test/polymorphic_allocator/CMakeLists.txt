@@ -1,13 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(project intrusive_ptr)
-
-if (CMAKE_VERSION VERSION_LESS 3.0)
-    PROJECT(${project} CXX)
-else ()
-    cmake_policy(SET CMP0048 NEW)
-    PROJECT(${project} VERSION "${CMAKE_PROJECT_VERSION}" LANGUAGES CXX)
-endif ()
+PROJECT(polymorphic_allocator CXX)
 
 set(SOURCE_FILES main.cpp)
 

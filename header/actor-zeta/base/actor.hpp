@@ -56,11 +56,11 @@ namespace actor_zeta { namespace base {
             return *this;
         }
 
-        actor_address address() const noexcept;
+        auto address() const noexcept -> address_t;
 
         ~actor();
 
-        inline abstract_actor* operator->() const noexcept {
+        inline auto operator->() const noexcept -> abstract_actor* {
             return ptr_.get();
         }
 
@@ -68,9 +68,9 @@ namespace actor_zeta { namespace base {
             return static_cast<bool>(ptr_);
         }
 
-        auto type() const -> const std::string&;
+        [[nodiscard]] auto type() const -> const std::string&;
 
-        inline bool operator!() const noexcept {
+        inline auto operator!() const noexcept -> bool {
             return !ptr_;
         }
 

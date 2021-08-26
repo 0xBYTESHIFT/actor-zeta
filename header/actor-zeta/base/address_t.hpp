@@ -8,23 +8,23 @@ namespace actor_zeta { namespace base {
     ///
     /// @brief A compact location expressor
     ///
-    class actor_address final {
+    class address_t final {
     public:
-        actor_address() = default;
+        address_t() = default;
 
-        actor_address(actor_address&&) = default;
+        address_t(address_t&&) = default;
 
-        actor_address(const actor_address&) = default;
+        address_t(const address_t&) = default;
 
-        actor_address& operator=(actor_address&&) = default;
+        explicit address_t(communication_module*);
 
-        actor_address& operator=(const actor_address&) = default;
+        ~address_t();
 
-        explicit actor_address(communication_module*);
+        address_t& operator=(address_t&&) = default;
 
-        ~actor_address();
+        address_t& operator=(const address_t&) = default;
 
-        inline communication_module* operator->() const noexcept {
+        inline auto operator->() const noexcept -> communication_module* {
             return ptr_.get();
         }
 
@@ -32,7 +32,7 @@ namespace actor_zeta { namespace base {
             return static_cast<bool>(ptr_);
         }
 
-        inline bool operator!() const noexcept {
+        inline auto operator!() const noexcept -> bool {
             return !ptr_;
         }
 

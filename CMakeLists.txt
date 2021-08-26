@@ -85,7 +85,6 @@ set(HEADER_FILES
         header/actor-zeta/base/cooperative_actor.hpp
         header/actor-zeta/base/basic_actor.hpp
         header/actor-zeta/base/communication_module.hpp
-        header/actor-zeta/base/context.hpp
         header/actor-zeta/base/handler.hpp
         header/actor-zeta/base/metadata.hpp
         header/actor-zeta/base/supervisor.hpp
@@ -169,5 +168,12 @@ if(ALLOW_EXAMPLES)
 endif()
 
 if (ALLOW_TESTS)
+    message("CONAN_BUILD_INFO_DIR = ${CMAKE_BINARY_DIR}")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup(TARGETS)
+    message(STATUS "LIBS = ${CONAN_LIBS}")
+    message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+
+    enable_testing()
     add_subdirectory(test)
 endif ()

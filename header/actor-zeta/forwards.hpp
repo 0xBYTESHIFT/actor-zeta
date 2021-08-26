@@ -6,9 +6,8 @@ namespace actor_zeta {
         class message;
         class abstract_actor;
         class actor;
-        class actor_address;
+        class address_t;
         class handler;
-        struct context;
         class supervisor_t;
         class communication_module;
         class dispatcher_t;

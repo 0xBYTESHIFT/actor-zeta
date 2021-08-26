@@ -6,10 +6,6 @@
 
 namespace actor_zeta { namespace base {
 
-    using defual_spawn = std::function<actor()>;
-    void spawn() {
-    }
-
     class supervisor_t : public communication_module {
     public:
         supervisor_t(std::string);
@@ -18,7 +14,7 @@ namespace actor_zeta { namespace base {
 
         virtual auto executor() noexcept -> executor::abstract_executor* = 0;
 
-        virtual auto join(actor) -> actor_address = 0;
+        virtual auto join(actor) -> address_t = 0;
 
         using communication_module::broadcast;
 
