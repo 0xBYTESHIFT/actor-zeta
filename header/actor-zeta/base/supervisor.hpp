@@ -7,8 +7,7 @@
 namespace actor_zeta { namespace base {
 
     using defual_spawn = std::function<actor()>;
-    void spawn(){
-
+    void spawn() {
     }
 
     class supervisor_t : public communication_module {
@@ -25,7 +24,7 @@ namespace actor_zeta { namespace base {
 
     protected:
         auto set_current_message(message_ptr) -> void;
-        auto current_message() -> message* final;
+        auto current_message() -> message* override;
 
     private:
         message* current_message_;

@@ -5,7 +5,6 @@
 #include <actor-zeta/forwards.hpp>
 #include <any>
 #include <string>
-#include <string_view>
 
 namespace actor_zeta { namespace base {
 
@@ -40,7 +39,7 @@ namespace actor_zeta { namespace base {
 
         message* prev;
 
-        auto command() const noexcept -> std::string_view;
+        auto command() const noexcept -> const std::string&;
 
         auto sender() const -> base::actor_address;
 

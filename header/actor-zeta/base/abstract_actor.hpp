@@ -2,7 +2,6 @@
 
 #include <actor-zeta/base/communication_module.hpp>
 #include <actor-zeta/forwards.hpp>
-#include <string_view>
 
 namespace actor_zeta { namespace base {
     ///
@@ -20,7 +19,7 @@ namespace actor_zeta { namespace base {
         ~abstract_actor() override;
 
     protected:
-        abstract_actor(std::string_view);
+        abstract_actor(const std::string&);
     };
 
 }} // namespace actor_zeta::base

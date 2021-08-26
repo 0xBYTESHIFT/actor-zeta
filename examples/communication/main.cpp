@@ -8,12 +8,11 @@
 
 using actor_zeta::abstract_executor;
 using actor_zeta::basic_async_actor;
-using actor_zeta::context;
-using actor_zeta::supervisor;
+using actor_zeta::supervisor_t;
 
 using actor_zeta::join;
 using actor_zeta::link;
-using actor_zeta::message;
+using actor_zeta::base::message;
 
 class dummy_executor final : public abstract_executor {
 public:
@@ -27,10 +26,10 @@ public:
     void stop() override {}
 };
 
-class supervisor_lite final : public supervisor {
+class supervisor_lite final : public supervisor_t {
 public:
     explicit supervisor_lite(dummy_executor* ptr)
-        : supervisor("network")
+        : supervisor_t("network")
         , e_(ptr)
         , cursor(0)
         , system_{"sync_contacts", "add_link", "remove_link"} {
@@ -68,7 +67,7 @@ public:
 private:
     auto local(message msg) -> void {
         set_current_message(std::move(msg));
-        dispatch().execute(*this);
+        dispatch().execute();
     }
 
     auto redirect_robin(message msg) -> void {
@@ -84,7 +83,7 @@ private:
     abstract_executor* e_;
     std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
-    std::unordered_set<actor_zeta::detail::string_view> system_;
+    std::unordered_set<std::string> system_;
 };
 
 class storage_t final : public basic_async_actor {

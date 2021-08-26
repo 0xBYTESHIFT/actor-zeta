@@ -3,6 +3,7 @@
 #include <actor-zeta/detail/intrusive_ptr.hpp>
 #include <actor-zeta/detail/type_list.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <string>
 
 //smart actor
 namespace actor_zeta { namespace base {
@@ -67,7 +68,7 @@ namespace actor_zeta { namespace base {
             return static_cast<bool>(ptr_);
         }
 
-        auto type() const -> std::string_view;
+        auto type() const -> const std::string&;
 
         inline bool operator!() const noexcept {
             return !ptr_;

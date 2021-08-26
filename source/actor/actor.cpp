@@ -1,17 +1,16 @@
 #include <actor-zeta/base/abstract_actor.hpp>
 #include <actor-zeta/base/actor.hpp>
 #include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/message.hpp>
 
 namespace actor_zeta { namespace base {
-    actor::~actor() {}
+    actor::~actor() = default;
 
     actor_address actor::address() const noexcept {
         return ptr_->address();
     }
 
-    std::string_view actor::type() const {
+    auto actor::type() const -> const std::string& {
         return ptr_->type();
     }
 

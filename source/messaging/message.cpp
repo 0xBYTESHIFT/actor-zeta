@@ -5,8 +5,8 @@
 
 namespace actor_zeta { namespace base {
 
-    auto message::command() const noexcept -> std::string_view {
-        return std::string_view(command_.data(), command_.size());
+    auto message::command() const noexcept -> const std::string& {
+        return command_;
     }
 
     auto message::clone() const -> message* {

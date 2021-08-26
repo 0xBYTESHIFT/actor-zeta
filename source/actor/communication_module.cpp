@@ -1,50 +1,52 @@
 #include <iostream>
 
-// clang-format off
-#include <actor-zeta/base/context.hpp>
-#include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/actor_address.hpp>
+#include <actor-zeta/base/communication_module.hpp>
+#include <actor-zeta/base/handler.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/impl/handler.ipp>
-#include <actor-zeta/base/communication_module.hpp>
-// clang-format on
 
 namespace actor_zeta { namespace base {
 
-    inline void error_sync_contacts(std::string_view __error__) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << "Not initialization actor_address type:" << __error__ << std::endl;
+    void error_sync_contacts(const std::string& name, const std::string& error) {
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Actor name : " << name << '\n';
+        std::cerr << "Not initialization address type:" << error << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
-    inline void error_duplicate_handler(std::string_view _error_) {
+    void error_duplicate_handler(const std::string& error) {
+        std::cerr << "Duplicate" << '\n';
+        std::cerr << "Handler: " << error << '\n';
         std::cerr << "Duplicate" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
-        std::cerr << "Duplicate" << std::endl;
     }
 
-    inline void error_add_handler(std::string_view _error_) {
-        std::cerr << "error add handler" << std::endl;
-        std::cerr << "Handler: " << _error_ << std::endl;
+    void error_add_handler(const std::string& error) {
+        std::cerr << "error add handler" << '\n';
+        std::cerr << "Handler: " << error << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
-    inline void error_skip(std::string_view __error__) {
-        std::cerr << "WARNING" << std::endl;
-        std::cerr << "Skip : " << __error__ << std::endl;
+    void error_skip(const std::string& sender, const std::string& reciever, const std::string& handler) {
+        std::cerr << "WARNING" << '\n';
+        std::cerr << "Skip, can't find handler: " << reciever << "::" << handler;
+        std::cerr << " sender: " << sender << "\n";
         std::cerr << "WARNING" << std::endl;
     }
 
-    void communication_module::execute(context& ctx) {
-        auto it = handlers_.find(ctx.current_message()->command());
+    void communication_module::execute() {
+        const auto& cmd = current_message()->command();
+        auto it = handlers_.find(cmd);
         if (it != handlers_.end()) {
-            return it->second->invoke(ctx);
-        } else {
-            error_skip(ctx.current_message()->command());
+            return it->second->invoke(*this);
         }
+        //auto sender = current_message()->sender().type();
+        auto sender = "sender";
+        auto reciever = this->type();
+        error_skip(sender, reciever, current_message()->command());
     }
 
-    bool communication_module::on(std::string_view name, handler* aa) {
+    bool communication_module::on(const std::string& name, handler* aa) {
         auto it = handlers_.find(name);
         bool status = false;
         if (it == handlers_.end()) {
@@ -75,15 +77,16 @@ namespace actor_zeta { namespace base {
     }
 
     auto communication_module::all_view_address() const -> void {
-        for (auto& i : *contacts_)
-            std::cerr << i.first << std::endl;
+        for (const auto& [name, list] : contacts_)
+            std::cerr << name << std::endl;
     }
 
-    auto communication_module::addresses(std::string_view name) -> actor_address& {
-        return contacts_->at(name);
+    auto communication_module::addresses(const std::string& name) -> address_range_t {
+        auto& list = contacts_.at(name);
+        return std::make_pair(list.cbegin(), list.cend());
     }
 
-    auto communication_module::self() -> actor_address {
+    auto communication_module::self() const -> actor_address {
         return address();
     }
 
@@ -91,15 +94,14 @@ namespace actor_zeta { namespace base {
         return type_.sub_type_;
     }
 
-    auto communication_module::type() const -> std::string_view {
+    auto communication_module::type() const -> const std::string& {
         return type_.type_;
     }
 
-    communication_module::~communication_module() {}
+    communication_module::~communication_module() = default;
 
-    communication_module::communication_module(std::string_view name, sub_type_t type)
-        : contacts_(new std::unordered_map<std::string_view, actor_address>)
-        , type_{0, type, name} {
+    communication_module::communication_module(const std::string& name, sub_type_t type)
+        : type_{0, type, name} {
         initialize();
     }
 
@@ -120,24 +122,27 @@ namespace actor_zeta { namespace base {
     void communication_module::add_link(actor_address address) {
         if (address) {
             auto name = address->type();
-            contacts_->emplace(name, std::move(address));
+            contacts_[name].emplace_back(std::move(address));
         } else {
-            error_sync_contacts(address->type());
+            auto mes = "communication_module::add_link !address";
+            error_sync_contacts(address->type(), mes);
         }
     }
 
     void communication_module::remove_link(const actor_address& address) {
-        auto it = contacts_->find(address->type());
-        if (it != contacts_->end()) {
-            contacts_->erase(it);
+        auto it = contacts_.find(address->type());
+        if (it != contacts_.end()) {
+            contacts_.erase(it);
         }
     }
 
     auto communication_module::broadcast(message_ptr msg) -> bool {
         auto tmp = std::move(msg);
 
-        for (auto& i : *contacts_) {
-            i.second->enqueue(message_ptr(tmp->clone()));
+        for (auto& [name, list] : contacts_) {
+            for (auto& i : list) {
+                i->enqueue(message_ptr(tmp->clone()));
+            }
         }
 
         return true;

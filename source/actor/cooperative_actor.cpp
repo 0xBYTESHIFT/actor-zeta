@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include <actor-zeta/base/actor_address.hpp>
-#include <actor-zeta/base/context.hpp>
 #include <actor-zeta/base/cooperative_actor.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
@@ -113,7 +112,7 @@ namespace actor_zeta { namespace base {
 
     cooperative_actor::cooperative_actor(
         supervisor_t* supervisor,
-        std::string_view name)
+        const std::string& name)
         : abstract_actor(name)
         , supervisor_(supervisor) {
         flags(static_cast<int>(state::empty));
@@ -175,7 +174,7 @@ namespace actor_zeta { namespace base {
 
     void cooperative_actor::consume(message& x) {
         current_message_ = &x;
-        execute(*this);
+        execute();
     }
 
     bool cooperative_actor::consume_from_cache() {

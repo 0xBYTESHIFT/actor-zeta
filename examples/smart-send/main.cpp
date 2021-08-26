@@ -41,7 +41,7 @@ auto thread_pool_deleter = [](abstract_executor* ptr) {
 class supervisor_lite final : public supervisor_t {
 public:
     explicit supervisor_lite()
-        : supervisor_t(actor_zeta::detail::string_view("network"))
+        : supervisor_t("network")
         , e_(new executor_t<work_sharing>(
                  2,
                  100),
@@ -82,7 +82,7 @@ public:
 private:
     auto local(actor_zeta::message_ptr msg) -> void {
         set_current_message(std::move(msg));
-        execute(*this);
+        execute();
     }
 
     auto redirect_robin(actor_zeta::message_ptr msg) -> void {
@@ -99,7 +99,7 @@ private:
     std::unique_ptr<abstract_executor, decltype(thread_pool_deleter)> e_;
     std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
-    std::unordered_set<actor_zeta::detail::string_view> system_;
+    std::unordered_set<std::string> system_;
 };
 
 struct download_data final {
