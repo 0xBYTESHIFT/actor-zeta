@@ -4,13 +4,13 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/detail/callable_trait.hpp>
 #include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 
 namespace actor_zeta { namespace base {
@@ -20,7 +20,7 @@ namespace actor_zeta { namespace base {
     class communication_module
         : public ref_counted {
     public:
-        using key_type = detail::string_view;
+        using key_type = std::string_view;
         using storage_t = std::unordered_map<key_type, std::unique_ptr<handler>>;
         using storage_contact_t = std::list<address_t>;
         using contacts_t = std::unordered_map<key_type, storage_contact_t>;
@@ -36,7 +36,7 @@ namespace actor_zeta { namespace base {
 
         ~communication_module() override;
 
-        auto type() const -> detail::string_view;
+        auto type() const -> std::string_view;
 
         auto message_types() const -> std::set<std::string>;
 
@@ -46,7 +46,7 @@ namespace actor_zeta { namespace base {
 
         auto broadcast(message_ptr) -> void;
 
-        auto broadcast(detail::string_view, message_ptr) -> void;
+        auto broadcast(std::string_view, message_ptr) -> void;
 
         virtual auto current_message() -> message* = 0;
 
@@ -55,22 +55,22 @@ namespace actor_zeta { namespace base {
 
         virtual void enqueue_base(message_ptr, executor::execution_device*) = 0;
 
-        auto address_book(detail::string_view) -> address_t;
+        auto address_book(std::string_view) -> address_t;
         auto address_book() -> address_range_t;
 
         template<class F>
-        auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
+        auto add_handler(std::string_view name, F&& f) -> typename std::enable_if<!std::is_member_function_pointer<F>::value>::type {
             on(name, make_handler(std::forward<F>(f)));
         }
 
         template<typename F>
-        auto add_handler(detail::string_view name, F&& f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
+        auto add_handler(std::string_view name, F&& f) -> typename std::enable_if<std::is_member_function_pointer<F>::value>::type {
             on(name, make_handler(std::forward<F>(f), static_cast<typename type_traits::get_callable_trait_t<F>::class_type*>(this)));
         }
 
         void execute();
 
-        bool on(detail::string_view, handler*);
+        bool on(std::string_view, handler*);
 
         /**
         * debug method

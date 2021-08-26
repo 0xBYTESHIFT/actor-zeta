@@ -2,7 +2,7 @@
 
 #include <actor-zeta/detail/pmr/memory_resource.hpp>
 #include <actor-zeta/detail/pmr/polymorphic_allocator.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
+#include <type_traits>
 
 using actor_zeta::detail::pmr::memory_resource;
 using actor_zeta::detail::pmr::polymorphic_allocator;

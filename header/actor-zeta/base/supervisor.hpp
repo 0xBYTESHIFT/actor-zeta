@@ -1,8 +1,8 @@
 #pragma once
 
 #include <actor-zeta/detail/intrusive_ptr.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <string_view>
 #include <type_traits>
 
 namespace actor_zeta { namespace base {
@@ -25,19 +25,19 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+            class = std::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
         supervisor(intrusive_ptr<T> ptr)
             : ptr_(std::move(ptr)) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+            class = std::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
         supervisor(T* ptr)
             : ptr_(ptr) {}
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+            class = std::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
         supervisor& operator=(intrusive_ptr<T> ptr) {
             supervisor tmp{std::move(ptr)};
             swap(tmp);
@@ -46,7 +46,7 @@ namespace actor_zeta { namespace base {
 
         template<
             class T,
-            class = type_traits::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
+            class = std::enable_if_t<std::is_base_of<supervisor_abstract, T>::value>>
         supervisor& operator=(T* ptr) {
             supervisor tmp{ptr};
             swap(tmp);
@@ -69,7 +69,7 @@ namespace actor_zeta { namespace base {
             return static_cast<bool>(ptr_);
         }
 
-        auto type() const -> detail::string_view;
+        auto type() const -> std::string_view;
 
         inline bool operator!() const noexcept {
             return !ptr_;

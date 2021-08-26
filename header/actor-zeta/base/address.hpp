@@ -1,7 +1,7 @@
 #pragma once
 
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
+#include <string_view>
 
 namespace actor_zeta { namespace base {
     ///
@@ -29,7 +29,7 @@ namespace actor_zeta { namespace base {
 
         auto enqueue(message_ptr) noexcept -> void;
 
-        auto type() const -> detail::string_view;
+        auto type() const -> std::string_view;
 
         operator bool() const noexcept;
 

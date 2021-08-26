@@ -13,7 +13,7 @@
 #include <memory>
 
 namespace {
-    constexpr static actor_zeta::detail::string_view non_type("non-type");
+    constexpr static std::string_view non_type("non-type");
 }
 
 namespace actor_zeta { namespace base {
@@ -44,7 +44,7 @@ namespace actor_zeta { namespace base {
         ptr_->enqueue(std::move(msg));
     }
 
-    auto address_t::type() const -> detail::string_view {
+    auto address_t::type() const -> std::string_view {
         return ptr_->type();
     }
 

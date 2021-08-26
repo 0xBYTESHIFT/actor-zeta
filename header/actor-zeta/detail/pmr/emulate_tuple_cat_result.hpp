@@ -2,11 +2,12 @@
 
 #include <actor-zeta/config.hpp>
 
+/*
 #if CPP17_OR_GREATER
 
 #elif CPP14_OR_GREATER or CPP11_OR_GREATER
 
-#include <actor-zeta/detail/type_traits.hpp>
+#include <type_traits>
 
 #include <cassert>
 #include <cstddef>
@@ -73,3 +74,4 @@ namespace actor_zeta { namespace detail { namespace pmr {
 #endif
 
 }}} // namespace actor_zeta::detail::pmr
+*/

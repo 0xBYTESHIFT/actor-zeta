@@ -82,7 +82,7 @@ private:
     abstract_executor* e_;
     std::vector<actor_zeta::actor> actors_;
     std::size_t cursor;
-    std::unordered_set<actor_zeta::detail::string_view> system_;
+    std::unordered_set<std::string_view> system_;
 };
 
 class storage_t final : public basic_async_actor {

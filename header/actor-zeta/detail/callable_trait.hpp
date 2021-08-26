@@ -1,8 +1,8 @@
 #pragma once
 
 #include <actor-zeta/detail/type_list.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
 #include <functional>
+#include <type_traits>
 
 namespace actor_zeta { namespace type_traits {
 
@@ -101,7 +101,7 @@ namespace actor_zeta { namespace type_traits {
     struct get_callable_trait_helper<T, false, false> {};
 
     template<class T>
-    struct get_callable_trait : get_callable_trait_helper<decay_t<T>> {};
+    struct get_callable_trait : get_callable_trait_helper<std::decay_t<T>> {};
 
     template<class T>
     using get_callable_trait_t = typename get_callable_trait<T>::type;
@@ -113,14 +113,14 @@ namespace actor_zeta { namespace type_traits {
 
         static void _fun(void*);
 
-        using result_type = decltype(_fun(static_cast<decay_t<T>*>(nullptr)));
+        using result_type = decltype(_fun(static_cast<std::decay_t<T>*>(nullptr)));
         static constexpr bool value = std::is_same<bool, result_type>::value;
     };
 
     template<class F, class... Ts>
     struct is_callable_with final {
         template<class U>
-        static auto sfinae(U*) -> decltype((std::declval<U&>()) (std::declval<Ts>()...), std::true_type());
+        static auto sfinae(U*) -> decltype((std::declval<U&>())(std::declval<Ts>()...), std::true_type());
 
         template<class U>
         static auto sfinae(...) -> std::false_type;

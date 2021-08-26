@@ -191,7 +191,7 @@ private:
     std::vector<actor_zeta::actor> actors_;
     std::vector<actor_zeta::address_t> actors_for_broadcast_;
     std::vector<actor_zeta::supervisor> supervisor_;
-    std::unordered_set<actor_zeta::detail::string_view> system_;
+    std::unordered_set<std::string_view> system_;
 };
 
 auto main() -> int {

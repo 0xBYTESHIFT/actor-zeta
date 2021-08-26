@@ -1,9 +1,6 @@
-// clang-format off
 #include <actor-zeta/base/address.hpp>
 #include <actor-zeta/base/message.hpp>
 #include <actor-zeta/base/supervisor.hpp>
-// clang-format on
-
 #include <actor-zeta/base/supervisor_abstract.hpp>
 
 namespace actor_zeta { namespace base {
@@ -14,7 +11,7 @@ namespace actor_zeta { namespace base {
         return address_t(ptr_.get());
     }
 
-    detail::string_view supervisor::type() const {
+    auto supervisor::type() const -> std::string_view {
         return ptr_->type();
     }
 

@@ -1,4 +1,3 @@
-#include "detail/string_view.hpp"
 #include <iostream>
 #include <vector>
 
@@ -12,26 +11,26 @@
 
 namespace actor_zeta { namespace base {
 
-    void error_sync_contacts(detail::string_view name, detail::string_view error) {
+    void error_sync_contacts(std::string_view name, std::string_view error) {
         std::cerr << "WARNING" << '\n';
         std::cerr << "Actor name : " << name << '\n';
         std::cerr << "Not initialization address type:" << error << '\n';
         std::cerr << "WARNING" << std::endl;
     }
 
-    void error_duplicate_handler(detail::string_view error) {
+    void error_duplicate_handler(std::string_view error) {
         std::cerr << "Duplicate" << '\n';
         std::cerr << "Handler: " << error << '\n';
         std::cerr << "Duplicate" << std::endl;
     }
 
-    void error_add_handler(detail::string_view error) {
+    void error_add_handler(std::string_view error) {
         std::cerr << "error add handler" << '\n';
         std::cerr << "Handler: " << error << '\n';
         std::cerr << "error add handler" << std::endl;
     }
 
-    void error_skip(detail::string_view sender, detail::string_view reciever, detail::string_view handler) {
+    void error_skip(std::string_view sender, std::string_view reciever, std::string_view handler) {
         std::cerr << "WARNING" << '\n';
         std::cerr << "Skip, can't find handler: " << reciever << "::" << handler;
         std::cerr << " sender: " << sender << "\n";
@@ -49,7 +48,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    bool communication_module::on(detail::string_view name, handler* aa) {
+    bool communication_module::on(std::string_view name, handler* aa) {
         auto it = handlers_.find(name);
         bool status = false;
         if (it == handlers_.end()) {
@@ -89,7 +88,7 @@ namespace actor_zeta { namespace base {
         return tmp;
     }
 
-    auto communication_module::address_book(detail::string_view type) -> address_t {
+    auto communication_module::address_book(std::string_view type) -> address_t {
         auto result = contacts_.find(type);
         if (result != contacts_.end()) {
             return *(result->second.begin());
@@ -100,8 +99,8 @@ namespace actor_zeta { namespace base {
         return std::make_pair(contacts_.cbegin(), contacts_.cend());
     }
 
-    auto communication_module::type() const -> detail::string_view {
-        return detail::string_view(type_.data(), type_.size());
+    auto communication_module::type() const -> std::string_view {
+        return std::string_view(type_.data(), type_.size());
     }
 
     communication_module::~communication_module() {}
@@ -158,7 +157,7 @@ namespace actor_zeta { namespace base {
         }
     }
 
-    auto communication_module::broadcast(detail::string_view type, message_ptr msg) -> void {
+    auto communication_module::broadcast(std::string_view type, message_ptr msg) -> void {
         auto tmp = std::move(msg);
 
         auto range = contacts_.find(type);

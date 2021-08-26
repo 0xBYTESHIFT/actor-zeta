@@ -6,7 +6,7 @@
 #include <utility>
 
 #include <actor-zeta/detail/ref_counted.hpp>
-#include <actor-zeta/detail/type_traits.hpp>
+#include <type_traits>
 
 namespace actor_zeta {
     ///

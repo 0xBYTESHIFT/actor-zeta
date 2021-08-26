@@ -1,9 +1,9 @@
 #pragma once
 
 #include <actor-zeta/base/communication_module.hpp>
-#include <actor-zeta/detail/string_view.hpp>
 #include <actor-zeta/forwards.hpp>
 #include <new>
+#include <string_view>
 
 namespace actor_zeta { namespace base {
     ///

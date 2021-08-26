@@ -22,12 +22,14 @@ namespace actor_zeta {
 
     template<class T, typename Arg>
     auto make_message_ptr(address_t sender_, T name, Arg&& arg) -> message* {
-        return new message(std::move(sender_), std::forward<T>(name), std::move(detail::any(std::forward<type_traits::decay_t<Arg>>(arg))));
+        auto any = std::any(std::forward<std::decay_t<Arg>>(arg));
+        return new message(std::move(sender_), std::forward<T>(name), std::move(any));
     }
 
     template<class T, typename... Args>
     auto make_message_ptr(address_t sender_, T name, Args&&... args) -> message* {
-        return new message(sender_, std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...})));
+        auto any = std::any(std::tuple<std::decay_t<Args>...>{std::forward<Args>(args)...});
+        return new message(sender_, std::forward<T>(name), std::move(any));
     }
 
     template<class T>
@@ -37,12 +39,14 @@ namespace actor_zeta {
 
     template<class T, typename Arg>
     auto make_message(address_t sender_, T name, Arg&& arg) -> message_ptr {
-        return message_ptr(new message(std::move(sender_), std::forward<T>(name), std::move(detail::any(std::forward<type_traits::decay_t<Arg>>(arg)))));
+        auto any = std::any(std::forward<std::decay_t<Arg>>(arg));
+        return message_ptr(new message(std::move(sender_), std::forward<T>(name), std::move(any)));
     }
 
     template<class T, typename... Args>
     auto make_message(address_t sender_, T name, Args&&... args) -> message_ptr {
-        return message_ptr(new message(sender_, std::forward<T>(name), std::move(detail::any(std::tuple<type_traits::decay_t<Args>...>{std::forward<Args>(args)...}))));
+        auto any = std::any(std::tuple<std::decay_t<Args>...>{std::forward<Args>(args)...});
+        return message_ptr(new message(sender_, std::forward<T>(name), std::move(any)));
     }
 
 } // namespace actor_zeta

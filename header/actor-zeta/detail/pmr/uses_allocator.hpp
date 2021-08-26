@@ -1,17 +1,10 @@
 #pragma once
 
-#if CPP17_OR_GREATER
-
-#elif CPP14_OR_GREATER or CPP11_OR_GREATER
-
-#include <actor-zeta/detail/type_traits.hpp>
-
 #include <cassert>
 #include <cstddef>
 #include <new>
+#include <type_traits>
 #include <utility>
-
-#endif
 
 namespace actor_zeta { namespace detail { namespace pmr {
 

@@ -32,30 +32,11 @@ namespace actor_zeta {
 #define COMPILER_GNUC_VERSION 0
 #endif
 
-#define CPP11_OR_GREATER (CPLUSPLUS >= 201103L)
-#define CPP14_OR_GREATER (CPLUSPLUS >= 201402L)
 #define CPP17_OR_GREATER (CPLUSPLUS >= 201703L)
 #define CPP20_OR_GREATER (CPLUSPLUS >= 202000L)
 
-#if CPP17_OR_GREATER && defined(__has_include)
-#if __has_include(<any> )
 #define HAVE_STD_ANY 1
-#else
-#define HAVE_STD_ANY 0
-#endif
-#else
-#define HAVE_STD_ANY 0
-#endif
-
-#if CPP17_OR_GREATER && defined(__has_include)
-#if __has_include(<string_view> )
 #define HAVE_STD_STRING_VIEW 1
-#else
-#define HAVE_STD_STRING_VIEW 0
-#endif
-#else
-#define HAVE_STD_STRING_VIEW 0
-#endif
 
 #define CACHE_LINE_SIZE 64
 

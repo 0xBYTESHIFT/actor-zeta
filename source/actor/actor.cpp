@@ -6,13 +6,13 @@
 // clang-format on
 
 namespace actor_zeta { namespace base {
-    actor::~actor() {}
+    actor::~actor() = default;
 
     address_t actor::address() const noexcept {
         return ptr_->address();
     }
 
-    detail::string_view actor::type() const {
+    std::string_view actor::type() const {
         return ptr_->type();
     }
 
